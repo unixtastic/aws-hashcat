@@ -13,16 +13,16 @@ if [[ -z $(which lsb_release) ]]; then
   WARN=1
 else
   RELEASE=$(lsb_release -r | awk '{print $2}')
-  if [[ $RELEASE != '20.04' ]] && [[ $RELEASE != '22.04' ]]; then
-    echo "Release $RELEASE is not 20.04 or 22.04."
+  if [[ $RELEASE != '26.04' ]]; then
+    echo "Release $RELEASE is not 26.04."
     WARN=1
   fi
 fi
 
 if [[ $WARN -eq 1 ]]; then
   echo ">>> WARNING -- WARNING -- WARNING <<<"
-  echo "Supported distributions are Ubuntu 20.04 and 22.04"
-  echo "Continuing anyway, but this will probably fail."
+  echo "Supported distribution is Ubuntu 26.04"
+  echo "Continuing anyway."
   echo ""
 fi
 

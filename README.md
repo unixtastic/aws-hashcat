@@ -1,19 +1,16 @@
 # aws-hashcat
 
-This is a quickstart process to install all the necessary GPU drivers and options for `hashcat` on Ubuntu 20.04 and 22.04 AWS instances.
+This is a quickstart process to install all the necessary GPU drivers and options for `hashcat` on Ubuntu 26.04 AWS instances.
 
-The following may not be an exhaustive list, but I know that the following instance types are compatible:
+Any Nvidia GPU instance should work, but getting quota can be a nightmare on AWS. g5 instances come with A10G Tensor Core GPUs, which are plenty fast and currently offer the best hashrate per dollar.
 
-- g4dn.xlarge ($0.53 per hour)
-- g3s.xlarge ($0.75 per hour)
-- p3.16xlarge ($24.48 per hour - watch out for this guy, he's expensive)
+- g5.xlarge   - 1 GPU  - $1.006 per hour (us-east-1)
+- g5.12xlarge - 4 GPUs - $5.672 per hour (us-east-1)
 
-The `p3.16xlarge` requires a [service limit increase](https://console.aws.amazon.com/support/home?#/case/create) for your account, and availability can actually be limited at times, depending on region, so you may have to keep trying to launch
-the instance every few minutes or so until it is successful.  You want to be careful running this type of instance.  It is *NOT* for long-term use.
+These types of instances are meant to be spun up when you need some decent GPU power for cracking hashes. You should terminate them as soon as you are done in order to avoid large fees.
 
-These types of instances are meant to be spun up when you need some decent GPU power for cracking hashes, and you should terminate them as soon as you are done in order to avoid large fees, especially the `p3.16xlarge`.
+The OS and full set of installed packages takes around 20GB. After install around 3GB will be freed with `apt clean all`. It's recommended to use a root disk of at least 25GB on your instances.
 
-The full set of installed packages takes around 15GB of space to install. After install around 3GB will be freed with `apt clean all`. It's recommended to use a root disk of at least 16GB on your instances.
 
 ## Installation
 
@@ -32,6 +29,7 @@ Your instance will reboot 3 times:
 - 3: After installing cuda.
 
 After the 3rd reboot, you will be ready to run `hashcat`, which will already be installed with all necessary GPU drivers.
+
 
 ### Please note:
 
