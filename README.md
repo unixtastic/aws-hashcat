@@ -28,15 +28,36 @@ Your instance will reboot 3 times:
 - 2: After installing hashcat, nvidia drivers and applying kernel module configuration.
 - 3: After installing cuda.
 
-After the 3rd reboot, you will be ready to run `hashcat`, which will already be installed with all necessary GPU drivers.
+After the 3rd reboot, `install.sh` will also download wordlists and rules to `/opt/wordlists/`.
 
+## Included wordlists & rules
+
+After installation, the following assets are available in `/opt/wordlists/`:
+
+| File | Description | Size |
+|---|---|---|
+| `ultimate-wpa2-clean.txt` | The ultimate wordlist from https://github.com/kennyn510/wpa2-wordlists.git (~7.2M unique passwords). | ~78 MB |
+| `OneRuleToRuleThemAll.rule` | A high-performing hashcat ruleset that generates common password mutations on the fly. | ~2 KB |
+
+### Using the wordlists
+
+Basic hashcat wordlist attack (`-a 0`):
+
+```bash
+hashcat -m 1000 -a 0 hashes.txt /opt/wordlists/ultimate-wpa2-clean.txt
+```
+
+With the ruleset applied to generate mutations:
+
+```bash
+hashcat -m 1000 -a 0 hashes.txt /opt/wordlists/ultimate-wpa2-clean.txt -r /opt/wordlists/OneRuleToRuleThemAll.rule
+```
+
+### Why rulesets?
+
+Rulesets like **OneRuleToRuleThemAll** apply hundreds of common transformations such as case changes, leet-speak substitutions, appending numbers/symbols, and so on to each word in the list. This generates millions of additional candidates at almost no disk cost.
 
 ### Please note:
 
-This repo does not come with any pre-installed wordlists or rules.
-
-I may add a script to download some rules and wordlists, as well as a helper script at some point in the future,
-but for now this remains BYOA (Bring Your Own Assets).
-
-Right now, this repo is simply used to help make the best use of your time while setting up a hashcat-ready AWS instance so you can get to cracking ASAP. 
+You can always add your own wordlists by copying them to `/opt/wordlists/`. The included RockYou + OneRuleToRuleThemAll combination covers the vast majority of common passwords, but targeted lists (e.g., company-specific terms) can improve results for specific engagements.
 

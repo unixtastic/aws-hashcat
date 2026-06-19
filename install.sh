@@ -32,7 +32,7 @@ scriptdir="$PWD"
 echo -e '\nChecking hashcat readiness...'
 sudo mkdir -p "$dir"
 
-# STAGE 1/3
+# STAGE 1/4
 if [[ ! -f "${dir}/00_install.LCK" ]]; then
   sudo bash -c 'echo "#!/bin/bash" >/etc/rc.local'
   sudo bash -c "echo -e \"\n${scriptdir}/install.sh  # HASHCAT INSTALL SCRIPT\" >> /etc/rc.local"
@@ -52,7 +52,7 @@ System going down for reboot [1/3]...
   sudo reboot
 fi
 
-# STAGE 2/3
+# STAGE 2/4
 if [[ ! -f "${dir}/01_drivers.LCK" ]]; then
   sudo "${scriptdir}/scripts/01_drivers.sh"
   touch "${dir}/01_drivers.LCK"
@@ -60,7 +60,7 @@ if [[ ! -f "${dir}/01_drivers.LCK" ]]; then
   reboot
 fi
 
-# STAGE 3/3
+# STAGE 3/4
 if [[ ! -f "${dir}/02_cuda.LCK" ]]; then
   sudo "${scriptdir}/scripts/02_cuda.sh"
   touch "${dir}/02_cuda.LCK"
@@ -68,9 +68,17 @@ if [[ ! -f "${dir}/02_cuda.LCK" ]]; then
   reboot
 fi
 
+# STAGE 4/4
+if [[ ! -f "${dir}/03_wordlists.LCK" ]]; then
+  sudo "${scriptdir}/scripts/03_wordlists.sh"
+  touch "${dir}/03_wordlists.LCK"
+fi
+
 sed -i '/# HASHCAT INSTALL SCRIPT/d' /etc/rc.local
 
 echo "echo -e 'hashcat is ready.\n'" >>/etc/profile.d/hashcat.sh
 
 echo "echo -e \"To check nvidia status, run 'sudo nvidia-smi'.\n\"" >>/etc/profile.d/hashcat.sh
+
+echo "echo -e \"Wordlists and rules are in /opt/wordlists/.'\n\"" >>/etc/profile.d/hashcat.sh
 
